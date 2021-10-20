@@ -1,0 +1,118 @@
+<div class="modal-header">
+  <h4 class="modal-title">Owner info</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="ownerForm" (submit)="submitOwner()" id="form">
+    <div class="form-group">
+      <label for="lname">Last name</label>
+      <input type="text" class="form-control" formControlName="lastName" id="lname"
+      [class.is-invalid]="isValid('lastName')" >
+      <small class="form-text text-danger" *ngIf="ownerForm.get('lastName')!.hasError('required') && ownerForm.get('lastName')!.touched">
+        Last name is required
+      </small>
+      <small class="form-text text-danger" *ngIf="ownerForm.get('lastName')!.hasError('pattern') && ownerForm.get('lastName')!.touched">
+        Only capitalized words are allowed
+      </small>
+    </div>
+    <div class="form-group">
+      <label for="fname">First name</label>
+      <input type="text" class="form-control" formControlName="firstName" id="fname"
+      [class.is-invalid]="isValid('firstName')">
+      <small class="form-text text-danger" *ngIf="ownerForm.get('firstName')!.hasError('required') && ownerForm.get('firstName')!.touched">
+        Last name is required
+      </small>
+      <small class="form-text text-danger" *ngIf="ownerForm.get('firstName')!.hasError('pattern') && ownerForm.get('firstName')!.touched">
+        Only capitalized words are allowed
+      </small>
+    </div>
+    <div class="form-group">
+      <label for="mname">Middle name</label>
+      <input type="text" class="form-control" formControlName="midName" id="mname"
+      [class.is-invalid]="isValid('midName')">
+      <small class="form-text text-danger" *ngIf="ownerForm.get('midName')!.hasError('required') && ownerForm.get('midName')!.touched">
+        Last name is required
+      </small>
+      <small class="form-text text-danger" *ngIf="ownerForm.get('midName')!.hasError('pattern') && ownerForm.get('midName')!.touched">
+        Only capitalized words are allowed
+      </small>
+    </div>
+    <h4>Cars</h4>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Licence number</th>
+            <th>Producer</th>
+            <th>Model</th>
+            <th>Year</th>
+            <th> </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr formArrayName="cars" *ngFor="let car of carsForm.controls; let i = index">
+            <td [formGroupName]="i">
+              <input type="text" class="form-control" formControlName="licenceNumber"
+                [class.is-invalid]="carsForm.at(i).get('licenceNumber')!.invalid && carsForm.at(i).get('licenceNumber')!.touched">
+              <small class="form-text text-danger"
+                *ngIf="carsForm.at(i).get('licenceNumber')!.hasError('required') && carsForm.at(i).get('licenceNumber')!.touched">
+                Licence number is required
+              </small>
+              <small class="form-text text-danger"
+                *ngIf="carsForm.at(i).get('licenceNumber')!.hasError('pattern') && carsForm.at(i).get('licenceNumber')!.touched">
+                Wrong licence number format
+              </small>
+            </td>
+            <td [formGroupName]="i">
+              <input type="text" class="form-control" formControlName="producer"
+                [class.is-invalid]="carsForm.at(i).get('producer')!.invalid && carsForm.at(i).get('producer')!.touched">
+              <small class="form-text text-danger"
+                *ngIf="carsForm.at(i).get('producer')!.hasError('required') && carsForm.at(i).get('producer')!.touched">
+                Producer is required
+              </small>
+            </td>
+            <td [formGroupName]="i">
+              <input type="text" class="form-control" formControlName="model"
+                [class.is-invalid]="carsForm.at(i).get('model')!.invalid && carsForm.at(i).get('model')!.touched">
+              <small class="form-text text-danger"
+                *ngIf="carsForm.at(i).get('model')!.hasError('required') && carsForm.at(i).get('model')!.touched">
+                Model is required
+              </small>
+            </td>
+            <td [formGroupName]="i">
+              <input type="text" class="form-control" formControlName="year"
+                [class.is-invalid]="carsForm.at(i).get('year')!.invalid && carsForm.at(i).get('year')!.touched">
+              <small class="form-text text-danger"
+                *ngIf="carsForm.at(i).get('year')!.hasError('required') && carsForm.at(i).get('year')!.touched">
+                Year is required
+              </small>
+              <small class="form-text text-danger"
+                *ngIf="(carsForm.at(i).get('year')!.hasError('min') || carsForm.at(i).get('year')!.hasError('max')) && carsForm.at(i).get('year')!.touched">
+                The year must be between 1990 and the current year
+              </small>
+              <small class="form-text text-danger"
+                *ngIf="carsForm.at(i).get('year')!.hasError('pattern') && carsForm.at(i).get('year')!.touched">
+                Wrong year format
+              </small>
+            </td>
+            <td class="d-flex justify-content-between">
+              <i class="bi bi-trash-fill icon icon-delete" (click)="deleteCar(i)"></i>
+              <i class="bi bi-pencil-fill icon icon-edit" (click)="editCar(i)"></i>
+            </td>
+          </tr>
+          <button class="btn btn-primary" (click)="addCarForm()">Add car<i class="bi bi-plus-circle ml-3"></i></button>
+        </tbody>
+      </table>
+      <div *ngIf="errors.length > 0" class="alert alert-danger mb-0">
+        {{errors.toString()}}
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="submit" form="form" class="btn btn-primary" [disabled]="!ownerForm.valid"
+    ngbAutofocus>Save</button>
+  <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">Close</button>
+</div>

@@ -1,0 +1,72 @@
+<div class="container mt-4">
+  <h4 class="">Car owners</h4>
+  <div class="btn-group btn-group-toggle my-3" ngbRadioGroup [(ngModel)]="viewOrDel">
+    <label ngbButtonLabel class="btn-primary">
+      <input ngbButton type="radio" value="view"> Edit/View
+    </label>
+    <label ngbButtonLabel class="btn-primary">
+      <input ngbButton type="radio" value="delete"> Delete
+    </label>
+  </div>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Last name</th>
+        <th>First name</th>
+        <th>Middle name</th>
+        <th>Cars count</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let owner of owners" (click)="ownerOptions(owner.id!)">
+        <th>{{owner.id}}</th>
+        <td>{{owner.lastName}}</td>
+        <td>{{owner.firstName}}</td>
+        <td>{{owner.midName}}</td>
+        <td>{{owner.cars!.length}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <button class="btn btn-primary" (click)="adding=!adding">Add owner</button>
+  <form [formGroup]="newOwner" (submit)="addOwner()" *ngIf="adding">
+    <div class="row pt-4">
+      <div class="col">
+        <input type="text" class="form-control" formControlName="lastName" 
+          [class.is-invalid]="newOwner.get('lastName')!.invalid && newOwner.get('lastName')!.touched" 
+          placeholder="Last name">
+        <small class="form-text text-danger" *ngIf="newOwner.get('lastName')!.hasError('required') && newOwner.get('lastName')!.touched">
+          Last name is required
+        </small>
+        <small class="form-text text-danger" *ngIf="newOwner.get('lastName')!.hasError('pattern') && newOwner.get('lastName')!.touched">
+          Only capitalized words are allowed
+        </small>
+      </div>
+      <div class="col">
+        <input type="text" class="form-control" formControlName="firstName" 
+          [class.is-invalid]="newOwner.get('firstName')!.invalid && newOwner.get('firstName')!.touched" 
+          placeholder="First name">
+        <small class="form-text text-danger" *ngIf="newOwner.get('firstName')!.hasError('required') && newOwner.get('firstName')!.touched">
+          First name is required
+        </small>
+        <small class="form-text text-danger" *ngIf="newOwner.get('firstName')!.hasError('pattern') && newOwner.get('firstName')!.touched">
+          Only capitalized words are allowed
+        </small>
+      </div>
+      <div class="col">
+        <input type="text" class="form-control" formControlName="midName" 
+          [class.is-invalid]="newOwner.get('midName')!.invalid && newOwner.get('midName')!.touched"
+          placeholder="Middle name">
+        <small class="form-text text-danger" *ngIf="newOwner.get('midName')!.hasError('required') && newOwner.get('midName')!.touched">
+          Middle name is required
+        </small>
+        <small class="form-text text-danger" *ngIf="newOwner.get('midName')!.hasError('pattern') && newOwner.get('midName')!.touched">
+          Only capitalized words are allowed
+        </small>
+      </div>
+      <div class="col-1">
+        <input type="submit" class="btn btn-success" [disabled]="!newOwner.valid" value="Add">
+      </div>
+    </div>
+  </form>
+</div>
